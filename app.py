@@ -49,13 +49,20 @@ def track_and_redirect():
 def dashboard():
     if not os.path.exists(LOG_FILE):
         return "Belum ada data yang tercatat."
+    
     with open(LOG_FILE, "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         data = list(reader)
+
+    # Tambahkan nomor urut pada setiap data
+    for i, row in enumerate(data[1:], 1):  # Mulai dari 1 untuk nomor urut
+        row.insert(0, i)  # Menambahkan nomor urut di depan setiap baris data
+    
     html_template = '''
     <h2>Dashboard IP Tracker</h2>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr>
+            <th>No.</th>  <!-- Kolom untuk nomor urut -->
             {% for header in data[0] %}
             <th>{{ header }}</th>
             {% endfor %}
@@ -71,6 +78,7 @@ def dashboard():
     <p>Total akses: {{ data|length - 1 }}</p>
     '''
     return render_template_string(html_template, data=data)
+
 
 
 if __name__ == "__main__":

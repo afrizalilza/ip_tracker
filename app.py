@@ -26,9 +26,9 @@ def log_access(data):
 def index():
     return "Selamat datang di IP Tracker! Akses link yang dikirimkan ke kamu."
 
-@app.route("/track")
+@app.route("/go")
 def track_and_redirect():
-    target_url = request.args.get('target')
+    target_url = request.args.get('url')
     if not target_url:
         return "Link target tidak ditemukan!", 400
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
@@ -71,6 +71,7 @@ def dashboard():
     <p>Total akses: {{ data|length - 1 }}</p>
     '''
     return render_template_string(html_template, data=data)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
